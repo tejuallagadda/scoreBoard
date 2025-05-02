@@ -1,9 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function ScoreTracker() {
   const [players, setPlayers] = useState([]);
   const [name, setName] = useState("");
-  const [activePlayerIndex, setActivePlayerIndex] = useState(null); // State to track active player
+  const [activePlayerIndex, setActivePlayerIndex] = useState(null);
+
+  // Load players data from localStorage when the component mounts
+  useEffect(() => {
+    const storedPlayers = JSON.parse(localStorage.getItem("players"));
+    if (storedPlayers) {
+      setPlayers(storedPlayers);
+    }
+  }, []);
+
+  // Save players data to localStorage whenever it changes
+  useEffect(() => {
+    if (players.length > 0) {
+      localStorage.setItem("players", JSON.stringify(players));
+    }
+  }, [players]);
 
   const addPlayer = () => {
     if (!name.trim()) return;
